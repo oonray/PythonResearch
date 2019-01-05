@@ -1,3 +1,9 @@
 [submodule "MachineLearning"]
 	path = MachineLearning
 	url = https://github.com/oonray/MachineLearning
+[submodule "NUCPRG"]
+	path = NUCPRG
+	url = https://github.com/oonray/NUCPRG.git
+[submodule "python-pty-shells"]
+	path = python-pty-shells
+	url = https://github.com/infodox/python-pty-shells.git
