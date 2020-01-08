@@ -1,7 +1,11 @@
 import re
 from datetime import datetime as dtti
 from datetime import timedelta as td
+from stuff import get_my_value
 
+this_value=10
+
+print(this_value+get_my_value("five"))
 today = dtti.today()
 price = {
         "new":100,
