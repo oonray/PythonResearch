@@ -46,7 +46,7 @@ def make_tar(filename,files,compression):
                 raise ValueError("The parameter files needs to be a list")
             for f in files:
                 tar.add(f)
-                return True
+            return True
 
 def make_zip(filename,files):
     """
